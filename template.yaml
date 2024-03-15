@@ -8,10 +8,10 @@ Globals:
     MemorySize: 128
 
 Resources:
-  TechChallenge03UserPool:
+  teste-new:
     Type: "AWS::Cognito::UserPool"
     Properties: 
-      UserPoolName: TechChallenge03UserPool
+      UserPoolName: teste-new
       Schema: 
         - Name: "username"
           AttributeDataType: "String"
@@ -24,9 +24,9 @@ Resources:
   CognitoUserPoolClient:
     Type: "AWS::Cognito::UserPoolClient"
     Properties: 
-      ClientName: TechChallenge03UserPoolClient
+      ClientName: teste-user
       UserPoolId: 
-        Ref: TechChallenge03UserPool
+        Ref: teste-new
       ExplicitAuthFlows: 
         - "ALLOW_USER_SRP_AUTH"
         - "ALLOW_REFRESH_TOKEN_AUTH"
@@ -36,8 +36,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: auth/
-      Handler: app.lambda_handler
-      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
       Architectures:
         - x86_64
       Events:
