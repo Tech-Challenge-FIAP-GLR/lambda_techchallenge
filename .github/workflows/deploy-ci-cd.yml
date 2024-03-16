@@ -1,7 +1,7 @@
 name: Deploy Python Lambda
 
 on:
-  pull_request:
+  push:
     branches:
       - master
     paths:
@@ -40,15 +40,17 @@ jobs:
         unzip existing_lambda.zip -d lambda_env
         # Copy only the modified .py files from the commit into the unzipped directory
         # This will maintain their directory structure.
-        git diff --name-only HEAD^ HEAD | grep '\.py$' | while read -r file; do
-            # Create the directory structure in lambda_env for the modified file
-            mkdir -p lambda_env/$(dirname $file)
-            # Copy the modified file
-            cp $file lambda_env/$file
-            # Print what you've done with the file
-            echo "Copied $file to lambda_env/$file"
-            echo "Content of $file after copying:"
-            cat lambda_env/$file
+        for file in $(git diff-tree --no-commit-id --name-only -r HEAD); do
+            if [[ $file == *.py ]]; then
+                # Create the directory structure in lambda_env for the modified file
+                mkdir -p lambda_env/$(dirname $file)
+                # Copy the modified file
+                cp $file lambda_env/$file
+                # Print what you've done with the file
+                echo "Copied $file to lambda_env/$file"
+                echo "Content of $file after copying:"
+                cat lambda_env/$file
+            fi
         done
         # Zip the directory again
         cd lambda_env
