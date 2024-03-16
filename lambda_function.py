@@ -9,8 +9,8 @@ CLIENT_ID = 'v714qjfstuelmi6bnbgp9jlc2'
 
 #Teste
 
-def valida_CPF(cpf: str) -> bool:
-    return len(cpf) == 11 and cpf.isdigit() #vou usar apenas um validação simplesinha pra contar os caracters
+def valida_CPF(cpfUser: str) -> bool:
+    return len(cpfUser) == 11 and cpf.isdigit() #vou usar apenas um validação simplesinha pra contar os caracters
 
 def lambda_handler(event, context):
     body = event.get("body", {})
