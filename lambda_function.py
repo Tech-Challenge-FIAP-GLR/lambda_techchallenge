@@ -7,8 +7,10 @@ cognito_client = boto3.client('cognito-idp')
 USER_POOL_ID = 'us-east-2_oNUeC93Xd'
 CLIENT_ID = 'v714qjfstuelmi6bnbgp9jlc2'
 
-def valida_CPF(cpf: str) -> bool:
-    return len(cpf) == 11 and cpf.isdigit() #vou usar apenas um validação simplesinha pra contar os caracters
+#Teste
+
+def valida_CPF(userCpf: str) -> bool:
+    return len(userCpf) == 11 and cpf.isdigit() #vou usar apenas um validação simplesinha pra contar os caracters
 
 def lambda_handler(event, context):
     body = event.get("body", {})
