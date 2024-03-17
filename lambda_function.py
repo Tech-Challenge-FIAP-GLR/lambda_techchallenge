@@ -7,10 +7,8 @@ cognito_client = boto3.client('cognito-idp')
 USER_POOL_ID = 'us-east-2_oNUeC93Xd'
 CLIENT_ID = 'v714qjfstuelmi6bnbgp9jlc2'
 
-#Teste agr vai
-
 def valida_CPF(cpf: str) -> bool:
-    return len(cpf) == 11 and cpf.isdigit() #vou usar apenas um validação simplesinha pra contar os caracteress
+    return len(cpf) == 11 and cpf.isdigit() 
 
 def lambda_handler(event, context):
     body = event.get("body", {})
@@ -22,7 +20,7 @@ def lambda_handler(event, context):
             "statusCode": 400,
             "body": json.dumps({"message": "CPF e/ou senha não informados."})
         }
-    # ? Aqui, poderiamos adicionar uma validação básica do CPF
+    
     if not valida_CPF(username):
         return {
             "statusCode": 400,
@@ -41,7 +39,6 @@ def lambda_handler(event, context):
         challenge_name = response.get('ChallengeName')
 
         if challenge_name == 'NEW_PASSWORD_REQUIRED':
-            # ? O correto seria pedir uma nova senha ao usuario. Quem sabe no futuro...
             challenge_response = cognito_client.respond_to_auth_challenge(
                 ClientId=CLIENT_ID,
                 ChallengeName='NEW_PASSWORD_REQUIRED',
@@ -55,7 +52,6 @@ def lambda_handler(event, context):
         else:
             id_token = response.get("AuthenticationResult", {}).get("IdToken")
 
-        # retornando o JWT do coginito
         return {
             "statusCode": 200,
             "body": json.dumps({"token": id_token})
