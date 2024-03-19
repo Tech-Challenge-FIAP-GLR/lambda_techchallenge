@@ -14,8 +14,8 @@ A requisição é feita via API Gateway e retorna um token JWT.
 ```json
 {
   "body": {
-    "username": "12345678910",
-    "password": "Techfiap0$"
+    "username": "12345233910",
+    "password": "Techfi444"
   }
 }
 ```
