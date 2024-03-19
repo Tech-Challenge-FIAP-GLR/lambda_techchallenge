@@ -1,7 +1,7 @@
 # Food Tech Challenge FIAP
 ## Lambda de autenticação
 
-Esse componente serve para autenticar os usuários que irão acessar nosso serivdor antes de processarmos a requisição no EKS.
+Esse componente serve para autenticar os usuários que irão acessar nosso servidor antes de processarmos a requisição no EKS.
 
 A requisição é feita via API Gateway e retorna um token JWT.
 
