@@ -1,12 +1,28 @@
 # Food Tech Challenge FIAP
-## Elastic Kubernetes Service (Amazon EKS)
-Este repositório é responsável por criar toda a estrutura de Kubernetes com TerraForm dentro da nuvem da AWS utilizando o serviço EKS, assim a aplicação Food Tech Challenge utilizará desses serviços para realizar o deploy e ficar disponível para o usuário.
+## Lambda de autenticação
 
-## Atualizando o EKS
-Sempre que realizar uma atualização do código, deve-se criar um pull-request da branch utilizada para a branch "main", assim que realizar o merge, o github actions fará toda a atualizanção para a AWS.
+Esse componente serve para autenticar os usuários que irãop acessar nosso serivdor antes de de ato processarmos a requisição no EKS.
 
-## Requirements
-* AWS account
-* Configure aws access keys vars from Security Credentials:
-  * export AWS_ACCESS_KEY_ID=[your-key-id]
-  * export AWS_SECRET_ACCESS_KEY=[your-key-secret]
+A requisição é feita via API Gateway e retorna um token JWT.
+
+## Auth
+**Endpoint:** *https://*****1w3li.execute-api.us-east-2.amazonaws.com/HK/lambda_Auth*<br />
+**Método:** *POST*
+
+**Request Example:** 
+<br />
+```json
+{
+  "body": {
+    "username": "12345678910",
+    "password": "Techfiap0$"
+  }
+}
+```
+**Response Example:** 
+```json
+{
+    "statusCode": 200,
+    "body": "{\"token\": \"eyJraWQiOiJjR1hjR2NvVnhodTVJMW5pYU9YM2t5RnlneVBWbjJ6Ym10M3RFMHFpTTJjPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI1YWMxYjY5ZS1jM2VlLTRkNjctOTA4Mi05MTg5NDcyYzVmZWEiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tXC91cy1lYXN0LTJfb05VZUM5M1hkIiwiY29nbml0bzp1c2VybmFtZSI6IjEyMzQ1Njc4OTEwIiwib3JpZ2luX2p0aSI6IjhmNjYxOGQxLTNhM2MtNGU1ZS04OWU4LWZiYjY5YjI2NGI3YSIsImF1ZCI6InY3MTRxamZzdHVlbG1pNmJuYmdwOWpsYzIiLCJldmVudF9pZCI6Ijk4ZjliZTNiLTVmMDgtNGE4Mi04YTAyLTUxZWZlNmIzNThkOCIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNzEwODkyMTI5LCJleHAiOjE3MTA4OTU3MjksImlhdCI6MTcxMDg5MjEyOSwianRpIjoiOWEwMWVkMzItZTYxMy00ZGQ0LTgzZmYtMjZiZDVjOWI5YWRmIiwiZW1haWwiOiJndWlsaGVybWVwY3N0b3JlQGdtYWlsLmNvbSJ9.E3kRkpGQdOTzPOq8hMFllm3N7LW24KvQiwTfMmMtcKN6ZKJPXooJysbT5NuQu8ut3fOLVjc33E6B7oDqIsUO1tbCtI9OQvtGe54QX_NfSaY0Fpp3YpkGFXTwi-0BiW9A8OwwIlHxBWUnKCLsbp5aE21sgVx2erY7FaZwb9fvgbYmdHpqTr8650BgNUsOa5BbfHTxaUpl4bgsywY0JNMNBk3LYguvfHu9egEwWWgZ_DJKEOZbcM-HA2cJ3hnPqQIbU-UPDM38crt98Nci95JftHSBTsZWYVm2-dEy2MKE6uZZ5mtOo83Rt02_vBTUlk3rKn8j5i6TGZEncF8QIeuqOA\"}"
+}
+```
