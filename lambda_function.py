@@ -7,54 +7,54 @@ cognito_client = boto3.client('cognito-idp')
 USER_POOL_ID = 'us-east-2_oNUeC93Xd'
 CLIENT_ID = 'v714qjfstuelmi6bnbgp9jlc2'
 
-def valida_CPF(cpf: str) -> bool:
-    return len(cpf) == 11 and cpf.isdigit() 
+def verify_cpf_format(cpf: str) -> bool:
+    return len(cpf) == 11 and cpf.isdigit()
 
 def lambda_handler(event, context):
-    body = event.get("body", {})
-    username = body.get("username")
-    password = body.get("password")
+    req_body = event.get("body", {})
+    user = req_body.get("username")
+    pwd = req_body.get("password")
 
-    if not username or not password:
+    if not user or not pwd:
         return {
             "statusCode": 400,
-            "body": json.dumps({"message": "CPF e/ou senha não informados."})
+            "body": json.dumps({"message": "CPF e/ou senha não fornecidos."})
         }
     
-    if not valida_CPF(username):
+    if not verify_cpf_format(user):
         return {
             "statusCode": 400,
-            "body": json.dumps({"message": "CPF invalido!"})
+            "body": json.dumps({"message": "CPF inválido!"})
         }
 
     try:
         response = cognito_client.initiate_auth(
             AuthFlow='USER_PASSWORD_AUTH',
             AuthParameters={
-                'USERNAME': username,
-                'PASSWORD': password
+                'USERNAME': user,
+                'PASSWORD': pwd
             },
             ClientId=CLIENT_ID
         )
-        challenge_name = response.get('ChallengeName')
+        challenge = response.get('ChallengeName')
 
-        if challenge_name == 'NEW_PASSWORD_REQUIRED':
+        if challenge == 'NEW_PASSWORD_REQUIRED':
             challenge_response = cognito_client.respond_to_auth_challenge(
                 ClientId=CLIENT_ID,
                 ChallengeName='NEW_PASSWORD_REQUIRED',
                 Session=response.get('Session'),
                 ChallengeResponses={
-                    'USERNAME': username,
-                    'NEW_PASSWORD': password
+                    'USERNAME': user,
+                    'NEW_PASSWORD': pwd
                 }
             )
-            id_token = challenge_response.get("AuthenticationResult", {}).get("IdToken")
+            token = challenge_response.get("AuthenticationResult", {}).get("IdToken")
         else:
-            id_token = response.get("AuthenticationResult", {}).get("IdToken")
+            token = response.get("AuthenticationResult", {}).get("IdToken")
 
         return {
             "statusCode": 200,
-            "body": json.dumps({"token": id_token})
+            "body": json.dumps({"token": token})
         }
     except ClientError as e:
         return {
